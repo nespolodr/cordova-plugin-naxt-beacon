@@ -63,8 +63,9 @@ public class ScanService extends Service
 			//			PendingIntent.FLAG_UPDATE_CURRENT);
 			//	Notification notification = new Notification.Builder(context).setContentTitle("Iberika").setContentText("Voce tem uma notificacao")
 			//			.setContentIntent(contentIntent).build();
+
 				Notification notification = new Notification.Builder(context).setContentTitle("Iberika").setContentText("Voce tem uma notificacao")
-						.build();
+						.setVibrate(new long[] { 300, 300, 300, 300, 300 }).setSmallIcon(R.drawable.ic_dialog_info).build();
 				NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 				mNotifyMgr.notify(mNotificationId, notification);
 			}
