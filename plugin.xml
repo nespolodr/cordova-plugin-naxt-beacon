@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://cordova.apache.org/ns/plugins/1.0"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	id="cordova-plugin-naxt-beacon"
+	version="0.0.1">
+
+	<name>NaxtBeacon</name>
+	<description>Naxt SDK beacons</description>
+	<license>MIT</license>
+    <author>Diego R Nespolo</author>
+	<keywords>Iberika, Beacons</keywords>
+
+    <dependency id="cordova-plugin-estimote" />
+	
+	<js-module src="plugin/src/js/NaxtBeacon.js" name="NaxtBeacon">
+		<clobbers target="naxtbeacon" />
+	</js-module>
+
+	<platform name="android">
+		<config-file target="res/xml/config.xml" parent="/*">
+			<feature name="NaxtBeacon" >
+				<param name="android-package" value="br.com.naxt.sdk.NaxtBeacon"/>
+			</feature>
+		</config-file>
+		<config-file target="AndroidManifest.xml" parent="/manifest">
+			<uses-permission android:name="android.permission.BLUETOOTH" />
+			<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+			<uses-permission android:name="android.permission.VIBRATE" />
+			<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+		</config-file>
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<service android:name="br.com.naxt.sdk.service.ScanService" android:exported="true" />
+			<receiver android:enabled="true" android:exported="true" android:label="BeaconBroadcastReceiver" android:name="br.com.naxt.sdk.service.BeaconBroadcastReceiver">
+				<intent-filter>
+					<category android:name="android.intent.category.DEFAULT" />
+					<action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+					<action android:name="android.intent.action.BOOT_COMPLETED" />
+					<action android:name="br.com.iberika.sdk.SCAN_SERVICE" />
+				</intent-filter>
+			</receiver>
+		</config-file>
+
+		<source-file src="plugin/src/android/ScanService.java" target-dir="src/br/com/naxt/sdk/service" />
+		<source-file src="plugin/src/android/BeaconBroadcastReceiver.java" target-dir="src/br/com/naxt/sdk/service" />
+		<source-file src="plugin/src/android/ServiceUtils.java" target-dir="src/br/com/naxt/sdk/service" />
+	</platform>
+</plugin>

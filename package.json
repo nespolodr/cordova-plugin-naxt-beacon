@@ -1,0 +1,28 @@
+{
+  "name": "cordova-plugin-naxt-beacon",
+  "version": "0.0.1",
+  "description": "Naxt SDK beacons",
+  "cordova": {
+    "id": "cordova-plugin-naxt-beacon",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nespolodr/cordova-plugin-naxt-beacon.git"
+  },
+  "keywords": [
+    "Naxt",
+    "Beacons",
+    "ecosystem:cordova",
+    "cordova-android",
+    "Iberika"
+  ],
+  "author": "Iberika",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nespolodr/cordova-plugin-naxt-beacon/issues"
+  },
+  "homepage": "https://github.com/nespolodr/cordova-plugin-naxt-beacon#readme"
+}
