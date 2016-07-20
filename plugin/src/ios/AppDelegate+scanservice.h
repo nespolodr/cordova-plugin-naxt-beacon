@@ -1,10 +1,9 @@
 
 #import "AppDelegate.h"
 
-@interface AppDelegate (notification)
+@interface AppDelegate ()
 - (id) getCommandInstance:(NSString*)className;
 
-//@property (nonatomic, retain) NSDictionary  *launchNotification;
-@property (nonatomic, retain) NSNumber  *coldstart;
+@property (nonatomic) ESTBeaconManager *beaconManager;
 
 @end

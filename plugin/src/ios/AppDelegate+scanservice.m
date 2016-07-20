@@ -2,10 +2,9 @@
 #import "AppDelegate+scanservice.h"
 #import <objc/runtime.h>
 
-//static char launchNotificationKey;
-static char coldstartKey;
+static char beaconManagerKey;
 
-@implementation AppDelegate (notification)
+@implementation AppDelegate () <ESTBeaconManagerDelegate>
 
 - (id) getCommandInstance:(NSString*)className
 {
@@ -49,10 +48,6 @@ static char coldstartKey;
                                              selector:@selector(createNotificationChecker:)
                                                  name:UIApplicationDidFinishLaunchingNotification
                                                object:nil];
-//    [[NSNotificationCenter defaultCenter]addObserver:self
-//                                            selector:@selector(pushPluginOnApplicationDidBecomeActive:)
-//                                                name:UIApplicationDidBecomeActiveNotification
-//                                              object:nil];
 
     // This actually calls the original init method over in AppDelegate. Equivilent to calling super
     // on an overrided method, this is not recursive, although it appears that way. neat huh?
@@ -61,61 +56,60 @@ static char coldstartKey;
 
 // This code will be called immediately after application:didFinishLaunchingWithOptions:. We need
 // to process notifications in cold-start situations
-- (void)createNotificationChecker:(NSNotification *)notification
+- (void)createNotificationChecker
 {
-    NSLog(@"createNotificationChecker");
-    if (notification)
+
+  self.beaconManager = [ESTBeaconManager new];
+  self.beaconManager.delegate = self;
+
+  [self.beaconManager requestAlwaysAuthorization];
+  [self.beaconManager startMonitoringForRegion:[[CLBeaconRegion alloc]
+                                                initWithProximityUUID:[[NSUUID alloc]
+                                                                       initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"]
+                                                major:23772 minor:39582 identifier:@"monitored region"]];
+  [[UIApplication sharedApplication]
+   registerUserNotificationSettings:[UIUserNotificationSettings
+                                     settingsForTypes:UIUserNotificationTypeAlert
+                                     categories:nil]];
+
+}
+
+- (ESTBeaconManager *)beaconManager
+{
+    return objc_getAssociatedObject(self, &beaconManagerKey);
+}
+
+- (void)setBeaconManager:(ESTBeaconManager *)aESTBeaconManager
+{
+    objc_setAssociatedObject(self, &beaconManagerKey, aESTBeaconManager, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+/**
+ * CoreLocation monitoring event.
+ */
+- (void) beaconManager:(id)manager
+     didDetermineState:(CLRegionState)state
+             forRegion:(CLBeaconRegion*)region
+{
+
+    // Create state string.
+    NSString* stateString;
+    switch (state)
     {
-        NSDictionary *launchOptions = [notification userInfo];
-        if (launchOptions) {
-            NSLog(@"coldstart");
-//            self.launchNotification = [launchOptions objectForKey: @"UIApplicationLaunchOptionsRemoteNotificationKey"];
-            self.coldstart = [NSNumber numberWithBool:YES];
-        } else {
-            NSLog(@"not coldstart");
-            self.coldstart = [NSNumber numberWithBool:NO];
-        }
+        case CLRegionStateInside:
+            stateString = @"inside";
+            break;
+        case CLRegionStateOutside:
+            stateString = @"outside";
+            break;
+        case CLRegionStateUnknown:
+        default:
+            stateString = @"unknown";
     }
-}
 
-- (BOOL)userHasRemoteNotificationsEnabled {
-    UIApplication *application = [UIApplication sharedApplication];
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-        return application.currentUserNotificationSettings.types != UIUserNotificationTypeNone;
-    } else {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-        return application.enabledRemoteNotificationTypes != UIRemoteNotificationTypeNone;
-#pragma GCC diagnostic pop
-    }
-}
-
-// The accessors use an Associative Reference since you can't define a iVar in a category
-// http://developer.apple.com/library/ios/#documentation/cocoa/conceptual/objectivec/Chapters/ocAssociativeReferences.html
-//- (NSMutableArray *)launchNotification
-//{
-//    return objc_getAssociatedObject(self, &launchNotificationKey);
-//}
-
-//- (void)setLaunchNotification:(NSDictionary *)aDictionary
-//{
-//    objc_setAssociatedObject(self, &launchNotificationKey, aDictionary, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-//}
-
-- (NSNumber *)coldstart
-{
-    return objc_getAssociatedObject(self, &coldstartKey);
-}
-
-- (void)setColdstart:(NSNumber *)aNumber
-{
-    objc_setAssociatedObject(self, &coldstartKey, aNumber, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (void)dealloc
-{
-//    self.launchNotification = nil; // clear the association and release the object
-    self.coldstart = nil;
+    UILocalNotification *notification = [UILocalNotification new];
+    notification.alertBody = stateString;
+    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
 }
 
 @end
