@@ -11,7 +11,7 @@
 	<keywords>Iberika, Beacons</keywords>
 
     <dependency id="cordova-plugin-estimote" />
-	
+
 	<js-module src="plugin/src/js/NaxtBeacon.js" name="NaxtBeacon">
 		<clobbers target="naxtbeacon" />
 	</js-module>
@@ -43,5 +43,32 @@
 		<source-file src="plugin/src/android/ScanService.java" target-dir="src/br/com/naxt/sdk/service" />
 		<source-file src="plugin/src/android/BeaconBroadcastReceiver.java" target-dir="src/br/com/naxt/sdk/service" />
 		<source-file src="plugin/src/android/ServiceUtils.java" target-dir="src/br/com/naxt/sdk/service" />
+	</platform>
+	<platform name="ios">
+		<framework src="CoreBluetooth.framework" />
+		<framework src="CoreLocation.framework" />
+		<framework src="SystemConfiguration.framework" />
+
+		<header-file src="plugin/src/ios/AppDelegate+scanservice.h" />
+		<source-file src="plugin/src/ios/AppDelegate+scanservice.m" />
+
+		<config-file target="config.xml" parent="/*">
+			<feature name="NaxtBeacon">
+				<param name="ios-package" value="NaxtBeacon" />
+			</feature>
+		</config-file>
+
+				<config-file parent="/*" target="config.xml">
+						<feature name="LocationManager">
+								<param name="ios-package" value="CDVLocationManager"/>
+						</feature>
+				</config-file>
+
+				<config-file target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
+						<string>This app would like to scan for beacons when in the background.</string>
+				</config-file>
+				<config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
+						<string>This app would like to scan for beacons while it is in use.</string>
+				</config-file>
 	</platform>
 </plugin>

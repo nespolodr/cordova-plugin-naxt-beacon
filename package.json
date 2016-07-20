@@ -5,7 +5,8 @@
   "cordova": {
     "id": "cordova-plugin-naxt-beacon",
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   },
   "repository": {
@@ -17,6 +18,7 @@
     "Beacons",
     "ecosystem:cordova",
     "cordova-android",
+    "cordova-ios",
     "Iberika"
   ],
   "author": "Iberika",
