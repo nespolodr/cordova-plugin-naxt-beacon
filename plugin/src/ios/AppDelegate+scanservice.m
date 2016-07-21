@@ -1,8 +1,12 @@
 
 #import "AppDelegate+scanservice.h"
 #import <objc/runtime.h>
+#import <EstimoteSDK/EstimoteSDK.h>
 
 static char beaconManagerKey;
+@property (nonatomic) ESTBeaconManager *beaconManager;
+
+@end
 
 @implementation AppDelegate () <ESTBeaconManagerDelegate>
 
