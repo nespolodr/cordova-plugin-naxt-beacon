@@ -1,5 +1,7 @@
 
 #import "AppDelegate.h"
+#import "AppDelegate+scanservice.h"
+
 
 @interface AppDelegate ()
 - (id) getCommandInstance:(NSString*)className;
