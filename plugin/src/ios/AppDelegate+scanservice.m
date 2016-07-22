@@ -2,6 +2,8 @@
 #import "AppDelegate+ScanService.h"
 #import <objc/runtime.h>
 
+static char beaconManagerKey;
+
 @implementation AppDelegate (ScanService)
 
 void swizzleMethod(Class c, SEL originalSelector)
@@ -54,12 +56,11 @@ void swizzleMethod(Class c, SEL originalSelector)
 
     if (ret) {
 
-      ESTBeaconManager *beaconManager;
+      self.beaconManager = [ESTBeaconManager new];
+      self.beaconManager.delegate = self;
 
-      beaconManager = [ESTBeaconManager new];
-
-      [beaconManager requestAlwaysAuthorization];
-      [beaconManager startMonitoringForRegion:[[CLBeaconRegion alloc]
+      [self.beaconManager requestAlwaysAuthorization];
+      [self.beaconManager startMonitoringForRegion:[[CLBeaconRegion alloc]
                                                     initWithProximityUUID:[[NSUUID alloc]
                                                                            initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"]
                                                     major:23772 minor:39582 identifier:@"monitored region"]];
@@ -67,7 +68,6 @@ void swizzleMethod(Class c, SEL originalSelector)
        registerUserNotificationSettings:[UIUserNotificationSettings
                                          settingsForTypes:UIUserNotificationTypeAlert
                                          categories:nil]];
-
 
     }
 
@@ -94,6 +94,20 @@ void swizzleMethod(Class c, SEL originalSelector)
 //- (void)noop_applicationDidBecomeActive:(UIApplication *)application
 //{}
 
+- (ESTBeaconManager *)beaconManager
+{
+    return objc_getAssociatedObject(self, &beaconManagerKey);
+}
+
+- (void)setBeaconManager:(ESTBeaconManager *)aBeaconManager
+{
+    objc_setAssociatedObject(self, &beaconManagerKey, aBeaconManager, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)dealloc
+{
+    self.beaconManager = nil;
+}
 
 /**
  * CoreLocation monitoring event.

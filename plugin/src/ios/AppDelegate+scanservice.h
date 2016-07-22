@@ -4,4 +4,6 @@
 
 @interface AppDelegate (ScanService)
 
+@property (nonatomic, retain) ESTBeaconManager *beaconManager;
+
 @end
