@@ -2,9 +2,7 @@
 #import "AppDelegate.h"
 #import <EstimoteSDK/EstimoteSDK.h>
 
-@interface AppDelegate () <ESTBeaconManagerDelegate>
-
-- (id) getCommandInstance:(NSString*)className;
+@interface AppDelegate (ScanService) <ESTBeaconManagerDelegate>
 
 @property (nonatomic) ESTBeaconManager *beaconManager;
 
