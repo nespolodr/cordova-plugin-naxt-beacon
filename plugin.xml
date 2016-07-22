@@ -55,6 +55,7 @@
 		<config-file target="config.xml" parent="/*">
 			<feature name="NaxtBeacon">
 				<param name="ios-package" value="NaxtBeacon" />
+				<param name="onload" value="true" />
 			</feature>
 		</config-file>
 

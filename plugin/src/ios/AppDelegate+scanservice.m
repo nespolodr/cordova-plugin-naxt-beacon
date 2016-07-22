@@ -2,7 +2,7 @@
 #import "AppDelegate+ScanService.h"
 #import <objc/runtime.h>
 
-@implementation AppDelegate (ScanService) <ESTBeaconManagerDelegate>
+@implementation AppDelegate (ScanService)
 
 void swizzleMethod(Class c, SEL originalSelector)
 {
@@ -54,11 +54,12 @@ void swizzleMethod(Class c, SEL originalSelector)
 
     if (ret) {
 
-      self.beaconManager = [ESTBeaconManager new];
-      self.beaconManager.delegate = self;
+      ESTBeaconManager *beaconManager;
 
-      [self.beaconManager requestAlwaysAuthorization];
-      [self.beaconManager startMonitoringForRegion:[[CLBeaconRegion alloc]
+      beaconManager = [ESTBeaconManager new];
+
+      [beaconManager requestAlwaysAuthorization];
+      [beaconManager startMonitoringForRegion:[[CLBeaconRegion alloc]
                                                     initWithProximityUUID:[[NSUUID alloc]
                                                                            initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"]
                                                     major:23772 minor:39582 identifier:@"monitored region"]];
