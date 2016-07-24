@@ -23,7 +23,7 @@ import br.com.naxt.sdk.service.ServiceUtils;
 public class ScanService extends Service
 {
 	//	private static final Region ALL_ESTIMOTE_BEACONS_REGION = new Region("rid", null, null, null);
-	private static final Region BEACON_30 = new Region("rid", "B9407F30-F5F8-466E-AFF9-25556B57FE6D", 23772, 39582);
+	private static final Region REGION_01 = new Region("iberika_app_01", "B9407F30-F5F8-466E-AFF9-25556B57FE6D", 1, null);
 	private BeaconManager beaconManager;
 
 	@Override
@@ -67,9 +67,9 @@ public class ScanService extends Service
 					String className = ServiceUtils.getFullName(context, "MainActivity");
 					PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, Class.forName(className)),
 							PendingIntent.FLAG_UPDATE_CURRENT);
-					Notification notification = new Notification.Builder(context).setContentTitle("Iberika")
-							.setContentText("Voce tem uma notificacao").setVibrate(new long[] { 300, 300, 300, 300, 300 })
-							.setSmallIcon(R.drawable.ic_dialog_info).setContentIntent(contentIntent).build();
+					Notification notification = new Notification.Builder(context).setContentTitle(context.getApplicationInfo().loadLabel(getPackageManager()).toString())
+							.setContentText("Você está próximo a um beacon!").setVibrate(new long[] { 500 })
+							.setSmallIcon(R.drawable.ic_dialog_info).setContentIntent(contentIntent).setOngoing(true).build();
 					NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 					mNotifyMgr.notify(mNotificationId, notification);
 					Log.i("NextActivity", className);
@@ -103,7 +103,7 @@ public class ScanService extends Service
 					beaconManager.setBackgroundScanPeriod(10 * 1000, 2 * 1000);
 					beaconManager.setForegroundScanPeriod(10 * 1000, 2 * 1000);
 					//					beaconManager.startRanging(ALL_ESTIMOTE_BEACONS_REGION);
-					beaconManager.startMonitoring(BEACON_30);
+					beaconManager.startMonitoring(REGION_01);
 				} catch(RemoteException e)
 				{
 					beaconManager.disconnect();
