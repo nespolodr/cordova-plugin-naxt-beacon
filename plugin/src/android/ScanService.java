@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.StrictMode;
+import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 import br.com.naxt.sdk.service.ServiceUtils;
@@ -67,11 +68,14 @@ public class ScanService extends Service
 					String className = ServiceUtils.getFullName(context, "MainActivity");
 					PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, Class.forName(className)),
 							PendingIntent.FLAG_UPDATE_CURRENT);
-					Notification notification = new Notification.Builder(context).setContentTitle(context.getApplicationInfo().loadLabel(getPackageManager()).toString())
-							.setContentText("Você está próximo a um beacon!").setVibrate(new long[] { 500 })
-							.setSmallIcon(R.drawable.ic_dialog_info).setContentIntent(contentIntent).setOngoing(true).build();
+					Notification notification = new Notification.Builder(context)
+							.setContentTitle(context.getApplicationInfo().loadLabel(getPackageManager()).toString())
+							.setContentText("Você está próximo a um beacon!").setSmallIcon(R.drawable.ic_dialog_info).setContentIntent(contentIntent)
+							.setOngoing(true).build();
 					NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 					mNotifyMgr.notify(mNotificationId, notification);
+					Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+					v.vibrate(800);
 					Log.i("NextActivity", className);
 				} catch(Exception e)
 				{
