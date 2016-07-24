@@ -18,6 +18,7 @@ import android.os.RemoteException;
 import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Toast;
+import br.com.naxt.sdk.service.ServiceUtils;
 
 public class ScanService extends Service
 {
@@ -60,15 +61,25 @@ public class ScanService extends Service
 				Context context = ScanService.this;
 
 				int mNotificationId = 001;
-				PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class),
-						PendingIntent.FLAG_UPDATE_CURRENT);
-			//	Notification notification = new Notification.Builder(context).setContentTitle("Iberika").setContentText("Voce tem uma notificacao")
-			//			.setContentIntent(contentIntent).build();
 
-				Notification notification = new Notification.Builder(context).setContentTitle("Iberika").setContentText("Voce tem uma notificacao")
-						.setVibrate(new long[] { 300, 300, 300, 300, 300 }).setSmallIcon(R.drawable.ic_dialog_info).setContentIntent(contentIntent).build();
-				NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-				mNotifyMgr.notify(mNotificationId, notification);
+				try
+				{
+					String className = ServiceUtils.getFullName(context, "MainActivity");
+					PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, Class.forName(className)),
+							PendingIntent.FLAG_UPDATE_CURRENT);
+					Notification notification = new Notification.Builder(context).setContentTitle("Iberika")
+							.setContentText("Voce tem uma notificacao").setVibrate(new long[] { 300, 300, 300, 300, 300 })
+							.setSmallIcon(R.drawable.ic_dialog_info).setContentIntent(contentIntent).build();
+					NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+					mNotifyMgr.notify(mNotificationId, notification);
+					Log.i("NextActivity", className);
+				} catch(Exception e)
+				{
+					Log.e("NextActivity", "error loading main activity");
+					e.printStackTrace();
+				}
+
+			
 			}
 
 			@Override

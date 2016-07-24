@@ -3,6 +3,14 @@ package br.com.naxt.sdk.service;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
+import dalvik.system.DexFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 public class ServiceUtils
 {
@@ -18,4 +26,18 @@ public class ServiceUtils
 		}
 		return false;
 	}
+
+	public static String getFullName(Context context, String className) throws IOException
+	{
+		DexFile df = new DexFile(context.getPackageCodePath());
+		Enumeration<String> iter = df.entries();
+		while(iter.hasMoreElements())
+		{
+			String resource = iter.nextElement();
+			if(resource.endsWith(className))
+				return resource;
+		}
+		return null;
+	}
+
 }
