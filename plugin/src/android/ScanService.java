@@ -23,6 +23,8 @@ import br.com.naxt.sdk.service.ServiceUtils;
 
 public class ScanService extends Service
 {
+	private final String main = "MainActivity";
+	
 	//	private static final Region ALL_ESTIMOTE_BEACONS_REGION = new Region("rid", null, null, null);
 	private static final Region REGION_01 = new Region("iberika_app_01", "B9407F30-F5F8-466E-AFF9-25556B57FE6D", 1, null);
 	private BeaconManager beaconManager;
@@ -65,24 +67,23 @@ public class ScanService extends Service
 
 				try
 				{
-					String className = ServiceUtils.getFullName(context, "MainActivity");
+					String className = ServiceUtils.getFullName(context, main);
 					PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, Class.forName(className)),
 							PendingIntent.FLAG_UPDATE_CURRENT);
 					Notification notification = new Notification.Builder(context)
 							.setContentTitle(context.getApplicationInfo().loadLabel(getPackageManager()).toString())
-							.setContentText("Você está próximo a um beacon!").setSmallIcon(R.drawable.ic_dialog_info).setContentIntent(contentIntent)
+							.setContentText("Você tem uma nova mensagem!").setSmallIcon(R.drawable.ic_dialog_info).setContentIntent(contentIntent)
 							.setOngoing(true).build();
 					NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 					mNotifyMgr.notify(mNotificationId, notification);
 					Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-					v.vibrate(800);
+					v.vibrate(1500);
 					Log.i("NextActivity", className);
 				} catch(Exception e)
 				{
 					Log.e("NextActivity", "error loading main activity");
 					e.printStackTrace();
 				}
-
 			
 			}
 
