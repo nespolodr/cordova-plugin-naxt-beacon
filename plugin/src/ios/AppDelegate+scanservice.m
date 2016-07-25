@@ -1,5 +1,7 @@
 
 #import "AppDelegate+ScanService.h"
+#import <AudioToolbox/AudioToolbox.h>
+#import <UIKit/UIKit.h>
 #import <objc/runtime.h>
 
 static char beaconManagerKey;
@@ -116,27 +118,31 @@ void swizzleMethod(Class c, SEL originalSelector)
      didDetermineState:(CLRegionState)state
              forRegion:(CLBeaconRegion*)region
 {
+    UILocalNotification *notification = [UILocalNotification new];
+
     // Create state string.
     NSString* stateString;
     switch (state)
     {
         case CLRegionStateInside:
             stateString = @"Você tem uma nova mensagem!";
-
-            UILocalNotification *notification = [UILocalNotification new];
             notification.alertBody = stateString;
             [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+
             break;
         case CLRegionStateOutside:
             //stateString = @"outside";
             [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
             [[UIApplication sharedApplication] cancelAllLocalNotifications];
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
             break;
         case CLRegionStateUnknown:
         default:
             //stateString = @"unknown";
             break;
     }
+
 
 }
 
