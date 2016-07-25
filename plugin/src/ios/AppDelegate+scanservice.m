@@ -63,7 +63,7 @@ void swizzleMethod(Class c, SEL originalSelector)
       [self.beaconManager startMonitoringForRegion:[[CLBeaconRegion alloc]
                                                     initWithProximityUUID:[[NSUUID alloc]
                                                                            initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"]
-                                                    major:23772 minor:39582 identifier:@"monitored region"]];
+                                                    major:1 identifier:@"iberika_app_01"]];
       [[UIApplication sharedApplication]
        registerUserNotificationSettings:[UIUserNotificationSettings
                                          settingsForTypes:UIUserNotificationTypeAlert
@@ -116,25 +116,28 @@ void swizzleMethod(Class c, SEL originalSelector)
      didDetermineState:(CLRegionState)state
              forRegion:(CLBeaconRegion*)region
 {
-
     // Create state string.
     NSString* stateString;
     switch (state)
     {
         case CLRegionStateInside:
-            stateString = @"inside";
+            stateString = @"Você tem uma nova mensagem!";
+
+            UILocalNotification *notification = [UILocalNotification new];
+            notification.alertBody = stateString;
+            [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
             break;
         case CLRegionStateOutside:
-            stateString = @"outside";
+            //stateString = @"outside";
+            [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
+            [[UIApplication sharedApplication] cancelAllLocalNotifications];
             break;
         case CLRegionStateUnknown:
         default:
-            stateString = @"unknown";
+            //stateString = @"unknown";
+            break;
     }
 
-    UILocalNotification *notification = [UILocalNotification new];
-    notification.alertBody = stateString;
-    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
 }
 
 @end
