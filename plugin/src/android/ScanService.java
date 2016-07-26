@@ -13,6 +13,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.StrictMode;
@@ -24,6 +25,9 @@ import br.com.naxt.sdk.service.ServiceUtils;
 public class ScanService extends Service
 {
 	private final String main = "MainActivity";
+
+	private SharedPreferences sharedPref;
+	private SharedPreferences.Editor editor;
 	
 	//	private static final Region ALL_ESTIMOTE_BEACONS_REGION = new Region("rid", null, null, null);
 	private static final Region REGION_01 = new Region("iberika_app_01", "B9407F30-F5F8-466E-AFF9-25556B57FE6D", 1, null);
@@ -41,6 +45,10 @@ public class ScanService extends Service
 	public void onCreate()
 	{
 		super.onCreate();
+
+		Log.i("init", "SharedPreferences");
+		sharedPref = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
+		editor = sharedPref.edit();
 
 //		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 //		StrictMode.setThreadPolicy(policy);
@@ -62,6 +70,12 @@ public class ScanService extends Service
 			{
 				Log.i("NextActivity", "onEnteredRegion");
 				Context context = ScanService.this;
+
+                editor.putString("demo_string", "This is a demo string value! Scan Service");
+                boolean success = editor.commit();
+
+				String str = sharedPref.getString("demo_string", "invalid");
+				Log.i("NATIVE: ", str);
 
 				int mNotificationId = 001;
 
