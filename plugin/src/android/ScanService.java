@@ -47,7 +47,7 @@ public class ScanService extends Service
 		super.onCreate();
 
 		Log.i("init", "SharedPreferences");
-		sharedPref = getSharedPreferences(getPackageName(), MODE_PRIVATE);
+		sharedPref = getSharedPreferences("NativeStorage", MODE_PRIVATE);
 		editor = sharedPref.edit();
 
 //		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
