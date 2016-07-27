@@ -71,12 +71,6 @@ public class ScanService extends Service
 				Log.i("NextActivity", "onEnteredRegion");
 				Context context = ScanService.this;
 
-                editor.putString("demo_string", "This is a demo string value! Scan Service");
-                boolean success = editor.commit();
-
-				String str = sharedPref.getString("demo_string", "invalid");
-				Log.i("NATIVE: ", str);
-
 				int mNotificationId = 001;
 
 				try
@@ -93,12 +87,16 @@ public class ScanService extends Service
 					Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 					v.vibrate(1500);
 					Log.i("NextActivity", className);
+
+					editor.putString("rangeBeacon", "\"true\"").commit();
+					String rangeBeacon = sharedPref.getString("rangeBeacon", "\"false\"");
+					Log.i("NATIVE: ", rangeBeacon);
 				} catch(Exception e)
 				{
 					Log.e("NextActivity", "error loading main activity");
 					e.printStackTrace();
 				}
-			
+
 			}
 
 			@Override
@@ -107,6 +105,10 @@ public class ScanService extends Service
 				Log.i("NextActivity", "onExitedRegion");
 				NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 				mNotifyMgr.cancel(001);
+
+				editor.putString("rangeBeacon", "\"false\"").commit();
+				String rangeBeacon = sharedPref.getString("rangeBeacon", "\"false\"");
+				Log.i("NATIVE: ", rangeBeacon);
 			}
 		});
 
