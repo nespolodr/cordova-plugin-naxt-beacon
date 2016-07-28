@@ -125,7 +125,7 @@ void swizzleMethod(Class c, SEL originalSelector)
     switch (state)
     {
         case CLRegionStateInside:
-            stateString = @"Você tem uma nova mensagem!";
+            stateString = @"Você está em uma área interativa da Feira.";
             notification.alertBody = stateString;
             [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
 

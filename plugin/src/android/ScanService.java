@@ -80,7 +80,7 @@ public class ScanService extends Service
 							PendingIntent.FLAG_UPDATE_CURRENT);
 					Notification notification = new Notification.Builder(context)
 							.setContentTitle(context.getApplicationInfo().loadLabel(getPackageManager()).toString())
-							.setContentText("Você tem uma nova mensagem!").setSmallIcon(R.drawable.ic_dialog_email).setContentIntent(contentIntent)
+							.setContentText("Você está em uma área interativa da Feira.").setSmallIcon(R.drawable.ic_dialog_email).setContentIntent(contentIntent)
 							.setOngoing(true).build();
 					NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 					mNotifyMgr.notify(mNotificationId, notification);
