@@ -65,7 +65,7 @@ void swizzleMethod(Class c, SEL originalSelector)
       [self.beaconManager startMonitoringForRegion:[[CLBeaconRegion alloc]
                                                     initWithProximityUUID:[[NSUUID alloc]
                                                                            initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"]
-                                                    major:1 identifier:@"iberika_app_01"]];
+                                                    major:4 identifier:@"iberika_app_04"]];
       [[UIApplication sharedApplication]
        registerUserNotificationSettings:[UIUserNotificationSettings
                                          settingsForTypes:UIUserNotificationTypeAlert

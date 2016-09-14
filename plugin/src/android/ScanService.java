@@ -30,7 +30,7 @@ public class ScanService extends Service
 	private SharedPreferences.Editor editor;
 	
 	//	private static final Region ALL_ESTIMOTE_BEACONS_REGION = new Region("rid", null, null, null);
-	private static final Region REGION_01 = new Region("iberika_app_01", "B9407F30-F5F8-466E-AFF9-25556B57FE6D", 1, null);
+	private static final Region REGION_01 = new Region("iberika_app_04", "B9407F30-F5F8-466E-AFF9-25556B57FE6D", 4, null);
 	private BeaconManager beaconManager;
 
 	@Override
